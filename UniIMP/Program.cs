@@ -1,5 +1,6 @@
 using Microsoft.EntityFrameworkCore;
 using UniIMP.DataAccess;
+using UniIMP.DataAccess.Repositories;
 
 var builder = WebApplication.CreateBuilder(args);
 var configuration = builder.Configuration;
@@ -12,6 +13,8 @@ services.AddDbContext<ApplicationDbContext>(options =>
 {
     options.UseNpgsql(configuration.GetConnectionString("DefaultConnection"));
 });
+
+services.AddScoped(typeof(ICrudRepository<>), typeof(CrudRepository<>));
 
 var app = builder.Build();
 
