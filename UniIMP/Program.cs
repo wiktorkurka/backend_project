@@ -1,5 +1,5 @@
 using Microsoft.EntityFrameworkCore;
-using UniIMP.Database;
+using UniIMP.DataAccess;
 
 var builder = WebApplication.CreateBuilder(args);
 var configuration = builder.Configuration;

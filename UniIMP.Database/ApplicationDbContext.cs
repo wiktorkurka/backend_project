@@ -1,6 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 
-namespace UniIMP.Database
+namespace UniIMP.DataAccess
 {
     public class ApplicationDbContext : DbContext
     {

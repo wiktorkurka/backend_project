@@ -16,6 +16,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\UniIMP.Database\UniIMP.DataAccess.csproj" />
     <ProjectReference Include="..\UniIMP.Models\UniIMP.Models.csproj" />
   </ItemGroup>
 
