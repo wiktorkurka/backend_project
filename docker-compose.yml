@@ -1,0 +1,51 @@
+version: '3.4'
+
+services:
+
+  uniimp:
+    image: ${DOCKER_REGISTRY-}uniimp
+    container_name: uniimp
+    build:
+      context: .
+      dockerfile: UniIMP/Dockerfile
+    depends_on:
+    - postgres
+    networks:
+      uniimp_bridge:
+        ipv4_address: 172.10.0.2
+
+  postgres:
+    image: postgres:latest
+    container_name: uniimp_postgres
+    restart: always
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+      - POSTGRES_DB=uniimp_db
+    ports:
+      - '5432:5432'
+    volumes: 
+      - ./db:/var/lib/postgresql/data
+    networks:
+      uniimp_bridge:
+        ipv4_address: 172.10.0.3
+
+  uniimp_testenv:
+    image: ${DOCKER_REGISTRY-}uniimp_testenv
+    container_name: uniimp_testenv
+    build:
+      context: TestEnv
+      dockerfile: Dockerfile 
+    networks:
+      uniimp_bridge:
+        ipv4_address: 172.10.0.4
+
+
+networks:
+
+  uniimp_bridge:
+    driver: bridge
+    ipam:
+      config:
+       - subnet: 172.10.0.0/16
+         gateway: 172.10.0.1
