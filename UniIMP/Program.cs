@@ -1,9 +1,27 @@
+using Microsoft.EntityFrameworkCore;
+using UniIMP.Database;
+
 var builder = WebApplication.CreateBuilder(args);
+var configuration = builder.Configuration;
+var services = builder.Services;
 
 // Add services to the container.
-builder.Services.AddControllersWithViews();
+services.AddControllersWithViews();
+
+services.AddDbContext<ApplicationDbContext>(options =>
+{
+    options.UseNpgsql(configuration.GetConnectionString("DefaultConnection"));
+});
 
 var app = builder.Build();
+
+// Create after-build servise scope
+using (var scope = app.Services.CreateScope())
+{
+    var applicationDbContext = scope.ServiceProvider
+                                    .GetRequiredService<ApplicationDbContext>();
+    applicationDbContext.Database.EnsureCreated(); // Ensure creation of the database
+}
 
 // Configure the HTTP request pipeline.
 if (!app.Environment.IsDevelopment())
