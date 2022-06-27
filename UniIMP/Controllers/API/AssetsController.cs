@@ -3,9 +3,9 @@ using UniIMP.DataAccess;
 using UniIMP.DataAccess.Entities;
 using UniIMP.DataAccess.Repositories;
 
-namespace UniIMP.Controllers
+namespace UniIMP.Controllers.API
 {
-    public class AssetsController : CrudApiController<Asset>
+    public class AssetsController : CrudController<Asset>
     {
         private readonly ApplicationDbContext _dbContext;
         private readonly ICrudRepository<Asset> _assetRepository;
@@ -13,8 +13,8 @@ namespace UniIMP.Controllers
 
         public AssetsController(
             ApplicationDbContext dbContext,
-            ICrudRepository<Asset> assetRepository, 
-            ICrudRepository<AssetTag> tagRepository) 
+            ICrudRepository<Asset> assetRepository,
+            ICrudRepository<AssetTag> tagRepository)
             : base(assetRepository)
         {
             _dbContext = dbContext;
@@ -29,7 +29,7 @@ namespace UniIMP.Controllers
 
             if (asset == null)
                 return BadRequest();
-            
+
             await _dbContext.Entry(asset).Collection(a => a.Tags).LoadAsync();
 
             return Ok(asset.Tags);
@@ -42,7 +42,7 @@ namespace UniIMP.Controllers
 
             if (asset == null)
                 return BadRequest();
-            
+
             var tag = await _tagRepository.GetAsync(tagId);
 
             if (tag == null)

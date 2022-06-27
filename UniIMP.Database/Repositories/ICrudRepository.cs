@@ -8,7 +8,7 @@ using UniIMP.DataAccess.Entities;
 
 namespace UniIMP.DataAccess.Repositories
 {
-    public interface ICrudRepository<T> : IDisposable where T : DatabaseEntity
+    public interface ICrudRepository<T> : IDisposable where T : class
     {
         public IEnumerable<T> GetAll();
         public Task<IEnumerable<T>> GetAllAsync();
@@ -23,6 +23,8 @@ namespace UniIMP.DataAccess.Repositories
         public void Update(T entity);
         public void Save();
         public Task SaveAsync();
-        
+        public IQueryable<T> GetQueryable();
+
+
     }
 }

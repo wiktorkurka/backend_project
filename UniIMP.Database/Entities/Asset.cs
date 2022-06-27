@@ -6,8 +6,11 @@ using System.Text.Json.Serialization;
 namespace UniIMP.DataAccess.Entities
 
 {
-    public class Asset : DatabaseEntity
+    public class Asset
     {
+        [Key]
+        public int Id { get; set; }
+
 #pragma warning disable 8618
 
         [Required]

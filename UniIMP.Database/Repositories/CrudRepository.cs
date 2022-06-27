@@ -1,10 +1,8 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using System.Linq.Expressions;
-using UniIMP.DataAccess.Entities;
 
 namespace UniIMP.DataAccess.Repositories
 {
-    public class CrudRepository<T> : ICrudRepository<T>, IDisposable where T : DatabaseEntity
+    public class CrudRepository<T> : ICrudRepository<T>, IDisposable where T : class
     {
         private readonly ApplicationDbContext _dbContext;
         internal DbSet<T> entitySet;
@@ -64,6 +62,12 @@ namespace UniIMP.DataAccess.Repositories
 
         public async Task SaveAsync() =>
             await _dbContext.SaveChangesAsync();
+
+        public IQueryable<T> GetQueryable()
+        {
+            return entitySet.AsQueryable();
+        }
+
 
         // Dispose logic
         private bool disposed = false;

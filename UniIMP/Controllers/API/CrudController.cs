@@ -1,26 +1,28 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using System.Reflection;
 using UniIMP.DataAccess.Entities;
 using UniIMP.DataAccess.Repositories;
 
-namespace UniIMP.Controllers
+namespace UniIMP.Controllers.API
 {
     [ApiController]
     [Route("api/[controller]")]
-    public class CrudApiController<T> : ControllerBase where T : DatabaseEntity
+    public class CrudController<T> : ControllerBase where T : class
     {
         private readonly ICrudRepository<T> _repository;
 
-        public CrudApiController(ICrudRepository<T> repository)
+        public CrudController(ICrudRepository<T> repository)
         {
             _repository = repository;
         }
 
-        [HttpGet]
-        public async Task<IActionResult> Get()
-        {
-            var asset = await _repository.GetAllAsync();
 
-            return Ok(asset);
+        [HttpGet]
+        public async Task<IActionResult> Get([FromQuery] int page = 0, [FromQuery] int pageSize = 25)
+        {
+            IQueryable<T> queryable = _repository.GetQueryable();
+
+            return Ok(queryable.Skip(page * pageSize).Take(pageSize).AsEnumerable());
         }
 
         [HttpGet("{id}")]
@@ -66,7 +68,20 @@ namespace UniIMP.Controllers
             if (asset == null)
                 return BadRequest();
 
-            model.Id = id;
+            try
+            {
+                Type type = model.GetType();
+                PropertyInfo? idProp = type.GetProperty("Id");
+                if (idProp != null)
+                {
+                    idProp.SetValue(model, id);
+                }
+
+                
+            } catch (Exception e)
+            {
+                Console.WriteLine(e.StackTrace);
+            }
 
             _repository.Update(model);
             await _repository.SaveAsync();

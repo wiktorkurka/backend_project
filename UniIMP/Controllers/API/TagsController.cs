@@ -3,9 +3,9 @@ using UniIMP.DataAccess;
 using UniIMP.DataAccess.Entities;
 using UniIMP.DataAccess.Repositories;
 
-namespace UniIMP.Controllers
+namespace UniIMP.Controllers.API
 {
-    public class TagsController : CrudApiController<AssetTag>
+    public class TagsController : CrudController<AssetTag>
     {
         private readonly ApplicationDbContext _dbContext;
         private readonly ICrudRepository<Asset> _assetRepository;

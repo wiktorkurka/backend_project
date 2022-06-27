@@ -2,7 +2,7 @@
 using System.Diagnostics;
 using UniIMP.Models;
 
-namespace UniIMP.Controllers
+namespace UniIMP.Controllers.MVC
 {
     public class HomeController : Controller
     {
