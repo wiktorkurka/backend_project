@@ -44,6 +44,15 @@ namespace UniIMP.DataAccess
                      x.ToTable("AssetTags");
                  });
             });
+
+            builder.Entity<SnmpAgent>(e =>
+            {
+                e.ToTable(name: "SnmpAgents");
+
+                e.HasOne(sa => sa.Asset)
+                 .WithOne(a => a.Agent)
+                 .HasForeignKey<SnmpAgent>(a => a.AssetId);
+            });
         }
     }
 

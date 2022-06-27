@@ -24,6 +24,8 @@ namespace UniIMP.DataAccess.Entities
         [JsonIgnore]
         public List<AssetTag> Tags { get; set; }
 
+        public SnmpAgent Agent { get; set; }
+
         [NotMapped]
         [JsonIgnore]
         public JObject? jObject =>
