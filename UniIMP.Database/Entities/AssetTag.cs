@@ -1,7 +1,7 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using Newtonsoft.Json;
+using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Drawing;
-using System.Text.Json.Serialization;
 
 namespace UniIMP.DataAccess.Entities
 {
@@ -13,6 +13,7 @@ namespace UniIMP.DataAccess.Entities
         [Required]
         public string Name { get; set; }
 
+        [JsonIgnore]
         public List<Asset> Assets { get; set; }
 
         [Column("Color")]

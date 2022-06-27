@@ -1,4 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 using UniIMP.DataAccess.Entities;
 
 namespace UniIMP.DataAccess
@@ -37,6 +39,13 @@ namespace UniIMP.DataAccess
             {
                 e.ToTable(name: "Assets");
 
+                e.Property(e => e.Properties)
+                 .HasConversion(
+                    jObj => jObj.ToString(),
+                    str => JsonConvert.DeserializeObject<JObject>(
+                        string.IsNullOrEmpty(str) ? "{}" : str)
+                 );
+
                 e.HasOne(sa => sa.Agent)
                  .WithOne(a => a.Asset)
                  .IsRequired(false);
@@ -48,7 +57,7 @@ namespace UniIMP.DataAccess
 
                 e.HasOne(sa => sa.Asset)
                  .WithOne(a => a.Agent)
-                 .IsRequired(true);
+                 .IsRequired(false);
             });
         }
     }

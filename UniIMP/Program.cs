@@ -1,6 +1,5 @@
 using Microsoft.EntityFrameworkCore;
 using Quartz;
-using System.Text.Json.Serialization;
 using UniIMP.DataAccess;
 using UniIMP.DataAccess.Repositories;
 using UniIMP.Services;
@@ -11,10 +10,11 @@ var services = builder.Services;
 
 // Add services to the container.
 services.AddControllersWithViews()
-        .AddJsonOptions(options =>
+        .AddNewtonsoftJson(options =>
         {
-            options.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.IgnoreCycles;     // Prevent object Cycles
+            options.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore; // Fix JSON Object Reference Loop
         });
+        
 
 
 services.AddDbContext<ApplicationDbContext>(options =>
