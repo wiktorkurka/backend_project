@@ -1,20 +1,41 @@
 using Microsoft.EntityFrameworkCore;
+using Quartz;
+using System.Text.Json.Serialization;
 using UniIMP.DataAccess;
 using UniIMP.DataAccess.Repositories;
+using UniIMP.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 var configuration = builder.Configuration;
 var services = builder.Services;
 
 // Add services to the container.
-services.AddControllersWithViews();
+services.AddControllersWithViews()
+        .AddJsonOptions(options =>
+        {
+            options.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.IgnoreCycles;     // Prevent object Cycles
+        });
+
 
 services.AddDbContext<ApplicationDbContext>(options =>
 {
     options.UseNpgsql(configuration.GetConnectionString("DefaultConnection"));
 });
 
+// Add Job scheduling service from Quartz library
+services.AddQuartz(q =>
+{
+    q.UseMicrosoftDependencyInjectionJobFactory();
+});
+
+services.AddQuartzHostedService(q =>
+{
+    q.WaitForJobsToComplete = true;
+});
+
+
 services.AddScoped(typeof(ICrudRepository<>), typeof(CrudRepository<>));
+services.AddScoped(typeof(SnmpPollerService));
 
 var app = builder.Build();
 

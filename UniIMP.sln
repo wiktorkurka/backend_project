@@ -17,6 +17,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "UniIMP.DataAccess", "UniIMP
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "UniIMP.Utility", "UniIMP.Utility\UniIMP.Utility.csproj", "{8DD1008F-F08E-4859-9C45-85A44FBBB52B}"
 EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "UniIMP.Services", "UniIMP.Services\UniIMP.Services.csproj", "{FFC8D777-A6C6-4688-957D-AE10B7297504}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -43,6 +45,10 @@ Global
 		{8DD1008F-F08E-4859-9C45-85A44FBBB52B}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{8DD1008F-F08E-4859-9C45-85A44FBBB52B}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{8DD1008F-F08E-4859-9C45-85A44FBBB52B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{FFC8D777-A6C6-4688-957D-AE10B7297504}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{FFC8D777-A6C6-4688-957D-AE10B7297504}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{FFC8D777-A6C6-4688-957D-AE10B7297504}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{FFC8D777-A6C6-4688-957D-AE10B7297504}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

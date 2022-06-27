@@ -13,7 +13,6 @@ namespace UniIMP.DataAccess.Entities
         [Required]
         public string Name { get; set; }
 
-        [JsonIgnore]
         public List<Asset> Assets { get; set; }
 
         [Column("Color")]
@@ -25,7 +24,7 @@ namespace UniIMP.DataAccess.Entities
 
         [NotMapped]
         [JsonIgnore]
-        public Color Color { get; set; }
+        public Color Color { get; set; } 
 
         public AssetTag()
         {
