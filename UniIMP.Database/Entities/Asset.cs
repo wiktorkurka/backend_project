@@ -21,10 +21,13 @@ namespace UniIMP.DataAccess.Entities
         [Column(TypeName = "jsonb")]
         public string? Properties { get; set; }
 
-        [JsonIgnore]
         public List<AssetTag> Tags { get; set; }
 
-        public SnmpAgent Agent { get; set; }
+
+        [ForeignKey("Agent")]
+        [JsonIgnore]
+        public int? AgentId { get; set; }
+        public virtual SnmpAgent? Agent { get; set; }
 
         [NotMapped]
         [JsonIgnore]

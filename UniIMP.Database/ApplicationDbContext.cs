@@ -37,12 +37,9 @@ namespace UniIMP.DataAccess
             {
                 e.ToTable(name: "Assets");
 
-                e.HasMany(a => a.Tags)
-                 .WithMany(at => at.Assets)
-                 .UsingEntity(x =>
-                 {
-                     x.ToTable("AssetTags");
-                 });
+                e.HasOne(sa => sa.Agent)
+                 .WithOne(a => a.Asset)
+                 .IsRequired(false);
             });
 
             builder.Entity<SnmpAgent>(e =>
@@ -51,7 +48,7 @@ namespace UniIMP.DataAccess
 
                 e.HasOne(sa => sa.Asset)
                  .WithOne(a => a.Agent)
-                 .HasForeignKey<SnmpAgent>(a => a.AssetId);
+                 .IsRequired(true);
             });
         }
     }

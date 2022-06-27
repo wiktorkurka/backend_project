@@ -1,6 +1,7 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Net;
+using System.Text.Json.Serialization;
 
 namespace UniIMP.DataAccess.Entities
 {
@@ -11,9 +12,10 @@ namespace UniIMP.DataAccess.Entities
 
         [ForeignKey("Asset")]
         [Required]
+        [JsonIgnore]
         public int AssetId { get; set; }
 
-        public Asset Asset { get; set; }
+        public Asset? Asset { get; set; }
 
         public string IpAddress
         {
