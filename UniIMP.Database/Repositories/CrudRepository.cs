@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using System.Linq.Expressions;
 
 namespace UniIMP.DataAccess.Repositories
 {
@@ -63,11 +64,41 @@ namespace UniIMP.DataAccess.Repositories
         public async Task SaveAsync() =>
             await _dbContext.SaveChangesAsync();
 
-        public IQueryable<T> GetQueryable()
+        public IQueryable<T> GetQueryable() =>
+            entitySet.AsQueryable();
+
+        // Loading Related Entites
+        public void LoadRelated(T entity)
         {
-            return entitySet.AsQueryable();
+            var entityCollections = _dbContext.Entry(entity).Collections;
+            foreach (var collection in entityCollections)
+                collection.Load();
         }
 
+        public void LoadRelated(T entity, string collectionName) =>
+            _dbContext.Entry(entity).Collection(collectionName).Load();
+
+        public void LoadRelated<TProperty>(
+            T entity,
+            Expression<Func<T, IEnumerable<TProperty>>> propertyExpression)
+            where TProperty : class =>
+                _dbContext.Entry(entity).Collection(propertyExpression).Load();
+
+        public async Task LoadRelatedAsync(T entity)
+        {
+            var entityCollections = _dbContext.Entry(entity).Collections;
+            foreach (var collection in entityCollections)
+                await collection.LoadAsync();
+        }
+
+        public async Task LoadRelatedAsync(T entity, string collectionName) =>
+            await _dbContext.Entry(entity).Collection(collectionName).LoadAsync();
+
+        public async Task LoadRelatedAsync<TProperty>(
+            T entity,
+            Expression<Func<T, IEnumerable<TProperty>>> propertyExpression)
+            where TProperty : class =>
+                await _dbContext.Entry(entity).Collection(propertyExpression).LoadAsync();
 
         // Dispose logic
         private bool disposed = false;
