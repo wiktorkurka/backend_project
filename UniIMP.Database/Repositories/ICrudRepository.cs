@@ -1,6 +1,4 @@
-﻿using System.Linq.Expressions;
-
-namespace UniIMP.DataAccess.Repositories
+﻿namespace UniIMP.DataAccess.Repositories
 {
     public interface ICrudRepository<T> : IDisposable where T : class
     {
@@ -34,20 +32,10 @@ namespace UniIMP.DataAccess.Repositories
 
         public void LoadRelated(T entity);
 
-        public void LoadRelated(T entity, string collectionName);
-
-        public void LoadRelated<TProperty>(
-            T entity,
-            Expression<Func<T, IEnumerable<TProperty>>> propertyExpression)
-            where TProperty : class;
+        public void LoadRelated(T entity, string propertyName);
 
         public Task LoadRelatedAsync(T entity);
 
-        public Task LoadRelatedAsync(T entity, string collectionName);
-
-        public Task LoadRelatedAsync<TProperty>(
-            T entity,
-            Expression<Func<T, IEnumerable<TProperty>>> propertyExpression)
-            where TProperty : class;
+        public Task LoadRelatedAsync(T entity, string propertyName);
     }
 }

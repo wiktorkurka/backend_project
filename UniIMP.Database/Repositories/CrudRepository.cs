@@ -1,5 +1,4 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using System.Linq.Expressions;
 
 namespace UniIMP.DataAccess.Repositories
 {
@@ -70,35 +69,23 @@ namespace UniIMP.DataAccess.Repositories
         // Loading Related Entites
         public void LoadRelated(T entity)
         {
-            var entityCollections = _dbContext.Entry(entity).Collections;
-            foreach (var collection in entityCollections)
-                collection.Load();
+            var navigations = _dbContext.Entry(entity).Navigations;
+            foreach (var navigation in navigations)
+                navigation.Load();
         }
 
-        public void LoadRelated(T entity, string collectionName) =>
-            _dbContext.Entry(entity).Collection(collectionName).Load();
-
-        public void LoadRelated<TProperty>(
-            T entity,
-            Expression<Func<T, IEnumerable<TProperty>>> propertyExpression)
-            where TProperty : class =>
-                _dbContext.Entry(entity).Collection(propertyExpression).Load();
+        public void LoadRelated(T entity, string propertyName) =>
+            _dbContext.Entry(entity).Navigation(propertyName).Load();
 
         public async Task LoadRelatedAsync(T entity)
         {
-            var entityCollections = _dbContext.Entry(entity).Collections;
-            foreach (var collection in entityCollections)
-                await collection.LoadAsync();
+            var navigations = _dbContext.Entry(entity).Navigations;
+            foreach (var navigation in navigations)
+                await navigation.LoadAsync();
         }
 
-        public async Task LoadRelatedAsync(T entity, string collectionName) =>
-            await _dbContext.Entry(entity).Collection(collectionName).LoadAsync();
-
-        public async Task LoadRelatedAsync<TProperty>(
-            T entity,
-            Expression<Func<T, IEnumerable<TProperty>>> propertyExpression)
-            where TProperty : class =>
-                await _dbContext.Entry(entity).Collection(propertyExpression).LoadAsync();
+        public async Task LoadRelatedAsync(T entity, string propertyName) =>
+            await _dbContext.Entry(entity).Navigation(propertyName).LoadAsync();
 
         // Dispose logic
         private bool disposed = false;
