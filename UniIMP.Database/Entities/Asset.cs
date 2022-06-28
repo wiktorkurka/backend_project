@@ -20,17 +20,21 @@ namespace UniIMP.DataAccess.Entities
 
         public List<AssetTag> Tags { get; set; }
 
-
         [ForeignKey("Agent")]
         [JsonIgnore]
         public int? AgentId { get; set; }
+
         public virtual SnmpAgent? Agent { get; set; }
 
         public JObject Properties { get; set; }
 
+        [Required]
+        public DateTimeOffset CreationTime { get; set; }
+
         public Asset()
         {
             Tags = new List<AssetTag>();
+            CreationTime = DateTimeOffset.Now;
         }
     }
 }
