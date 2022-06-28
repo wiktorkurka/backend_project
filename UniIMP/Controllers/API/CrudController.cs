@@ -14,19 +14,19 @@ namespace UniIMP.Controllers.API
         {
             _repository = repository;
         }
-        
+
         [HttpGet]
         public async Task<IActionResult> Get(
             [FromQuery] int page = 0,
-            [FromQuery] int pageSize = 25, 
+            [FromQuery] int pageSize = 25,
             [FromQuery] bool loadRelated = false)
         {
             IQueryable<T> queryable = _repository.GetQueryable();
             List<T> entities = queryable.Skip(page * pageSize).Take(pageSize).ToList();
 
             if (loadRelated)
-            foreach (var entity in entities)
-               await _repository.LoadRelatedAsync(entity);
+                foreach (var entity in entities)
+                    await _repository.LoadRelatedAsync(entity);
 
             return Ok(entities);
         }
@@ -35,7 +35,7 @@ namespace UniIMP.Controllers.API
         public async Task<IActionResult> Get(int id, [FromQuery] bool loadRelated = false)
         {
             var entity = await _repository.GetAsync(id);
-            
+
             if (loadRelated && entity != null)
                 await _repository.LoadRelatedAsync(entity);
 
