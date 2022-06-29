@@ -5,6 +5,12 @@ using System.Net;
 
 namespace UniIMP.DataAccess.Entities
 {
+    public enum AgentState
+    {
+        Up = 1,
+        Down = 2,
+    }
+
     public class SnmpAgent
     {
         [Key]
@@ -15,26 +21,28 @@ namespace UniIMP.DataAccess.Entities
         [JsonIgnore]
         public int AssetId { get; set; }
 
-        public Asset? Asset { get; set; }
+        public virtual Asset? Asset { get; set; }
 
-        public string IpAddress
+        [Required]
+        public IPAddress IpAddress { get; set; }
+
+        [Required]
+        public string Community { get; set; }
+
+        [Required]
+        public DateTimeOffset Created { get; set; }
+
+        [Required]
+        public DateTimeOffset LastSeen { get; set; }
+
+        [Required]
+        public AgentState State { get; set; }
+
+        public SnmpAgent()
         {
-            get
-            {
-                if (ipAddress == null)
-                    return string.Empty;
-                else
-                    return ipAddress.ToString();
-            }
-            set
-            {
-                IPAddress? addr;
-                IPAddress.TryParse(value, out addr);
-                ipAddress = addr;
-            }
+            Created = DateTimeOffset.UtcNow;
+            LastSeen = DateTimeOffset.MinValue;
+            State = AgentState.Down;
         }
-
-        [NotMapped]
-        private IPAddress? ipAddress { get; set; }
     }
 }
