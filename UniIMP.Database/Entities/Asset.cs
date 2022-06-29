@@ -26,15 +26,16 @@ namespace UniIMP.DataAccess.Entities
 
         public virtual SnmpAgent? Agent { get; set; }
 
+        [Column(TypeName = "jsonb")]
         public JObject Properties { get; set; }
 
         [Required]
-        public DateTimeOffset CreationTime { get; set; }
+        public DateTimeOffset Created { get; set; }
 
         public Asset()
         {
             Tags = new List<AssetTag>();
-            CreationTime = DateTimeOffset.Now;
+            Created = DateTimeOffset.Now;
         }
     }
 }

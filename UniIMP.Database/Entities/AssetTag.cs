@@ -28,7 +28,7 @@ namespace UniIMP.DataAccess.Entities
         public Color Color { get; set; }
 
         [Required]
-        public DateTimeOffset CreationTime { get; set; }
+        public DateTimeOffset Created { get; set; }
 
         public AssetTag()
         {
@@ -36,13 +36,12 @@ namespace UniIMP.DataAccess.Entities
             Color = Color.FromArgb(random.Next(256), random.Next(256), random.Next(256));
 
             Assets = new List<Asset>();
-            CreationTime = DateTime.Now;
+            Created = DateTimeOffset.UtcNow;
         }
 
         public void SetLabelRGB(byte red, byte green, byte blue)
         {
             Color = Color.FromArgb(red, green, blue);
-            CreationTime = DateTimeOffset.UtcNow;
         }
     }
 }
