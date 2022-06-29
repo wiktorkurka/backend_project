@@ -3,6 +3,7 @@ using Quartz;
 using UniIMP.DataAccess;
 using UniIMP.DataAccess.Repositories;
 using UniIMP.Services;
+using UniIMP.Utility.JsonConverters;
 
 var builder = WebApplication.CreateBuilder(args);
 var configuration = builder.Configuration;
@@ -12,7 +13,12 @@ var services = builder.Services;
 services.AddControllersWithViews()
         .AddNewtonsoftJson(options =>
         {
-            options.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore; // Fix JSON Object Reference Loop
+            var settings = options.SerializerSettings;
+            
+            settings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore; // Fix JSON Object Reference Loop
+
+            // Register JSON Converters
+            settings.Converters.Add(new IpAddressConverter());  
         });
         
 
