@@ -134,7 +134,8 @@ namespace UniIMP.Services
             }
             else
                 agent.State = AgentState.Down;
-
+            
+            agent.LastUpdated = DateTimeOffset.UtcNow;
             _agentRepository.Update(agent);
             await _agentRepository.SaveAsync();
         }

@@ -3,6 +3,7 @@ using Quartz;
 using UniIMP.DataAccess;
 using UniIMP.DataAccess.Repositories;
 using UniIMP.Services;
+using UniIMP.Services.Jobs;
 using UniIMP.Utility.JsonConverters;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -32,6 +33,18 @@ services.AddDbContext<ApplicationDbContext>(options =>
 services.AddQuartz(q =>
 {
     q.UseMicrosoftDependencyInjectionJobFactory();
+
+    var pollerJob = new JobKey("PollerJob");
+
+    q.AddJob<SnmpPollerJob>(options => {
+         options.WithIdentity(pollerJob);
+    });
+
+    q.AddTrigger(options => {
+        options.ForJob(pollerJob)
+        .WithIdentity("PollerJob-trigger")
+        .WithCronSchedule("*/5 * * * *");
+    });
 });
 
 services.AddQuartzHostedService(q =>
