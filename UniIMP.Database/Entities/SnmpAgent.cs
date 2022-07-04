@@ -36,12 +36,16 @@ namespace UniIMP.DataAccess.Entities
         public DateTimeOffset LastSeen { get; set; }
 
         [Required]
+        public DateTimeOffset LastUpdated {get; set;}
+
+        [Required]
         public AgentState State { get; set; }
 
         public SnmpAgent()
         {
             Created = DateTimeOffset.UtcNow;
             LastSeen = DateTimeOffset.MinValue;
+            LastUpdated = DateTimeOffset.MinValue;
             State = AgentState.Down;
         }
     }
