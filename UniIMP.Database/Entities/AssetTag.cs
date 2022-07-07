@@ -1,7 +1,7 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using Newtonsoft.Json;
+using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Drawing;
-using System.Text.Json.Serialization;
 
 namespace UniIMP.DataAccess.Entities
 {
@@ -27,12 +27,16 @@ namespace UniIMP.DataAccess.Entities
         [JsonIgnore]
         public Color Color { get; set; }
 
+        [Required]
+        public DateTimeOffset Created { get; set; }
+
         public AssetTag()
         {
             Random random = new Random();
             Color = Color.FromArgb(random.Next(256), random.Next(256), random.Next(256));
 
             Assets = new List<Asset>();
+            Created = DateTimeOffset.UtcNow;
         }
 
         public void SetLabelRGB(byte red, byte green, byte blue)

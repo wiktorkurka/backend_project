@@ -1,5 +1,4 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using UniIMP.DataAccess;
 using UniIMP.DataAccess.Entities;
 using UniIMP.DataAccess.Repositories;
 
@@ -7,20 +6,16 @@ namespace UniIMP.Controllers.API
 {
     public class TagsController : CrudController<AssetTag>
     {
-        private readonly ApplicationDbContext _dbContext;
         private readonly ICrudRepository<Asset> _assetRepository;
         private readonly ICrudRepository<AssetTag> _tagRepository;
 
         public TagsController(
-            ApplicationDbContext dbContext,
             ICrudRepository<AssetTag> tagRepository,
             ICrudRepository<Asset> assetRepository)
             : base(tagRepository)
         {
-            _dbContext = dbContext;
             _tagRepository = tagRepository;
             _assetRepository = assetRepository;
-
         }
 
         [HttpGet("{id?}/assets")]
@@ -31,7 +26,7 @@ namespace UniIMP.Controllers.API
             if (tag == null)
                 return BadRequest();
 
-            await _dbContext.Entry(tag).Collection(a => a.Assets).LoadAsync();
+            await _tagRepository.LoadRelatedAsync(tag);
 
             return Ok(tag.Assets);
         }
@@ -55,5 +50,4 @@ namespace UniIMP.Controllers.API
             return Ok();
         }
     }
-
 }

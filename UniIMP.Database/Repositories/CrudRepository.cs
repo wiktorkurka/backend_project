@@ -63,11 +63,29 @@ namespace UniIMP.DataAccess.Repositories
         public async Task SaveAsync() =>
             await _dbContext.SaveChangesAsync();
 
-        public IQueryable<T> GetQueryable()
+        public IQueryable<T> GetQueryable() =>
+            entitySet.AsQueryable();
+
+        // Loading Related Entites
+        public void LoadRelated(T entity)
         {
-            return entitySet.AsQueryable();
+            var navigations = _dbContext.Entry(entity).Navigations;
+            foreach (var navigation in navigations)
+                navigation.Load();
         }
 
+        public void LoadRelated(T entity, string propertyName) =>
+            _dbContext.Entry(entity).Navigation(propertyName).Load();
+
+        public async Task LoadRelatedAsync(T entity)
+        {
+            var navigations = _dbContext.Entry(entity).Navigations;
+            foreach (var navigation in navigations)
+                await navigation.LoadAsync();
+        }
+
+        public async Task LoadRelatedAsync(T entity, string propertyName) =>
+            await _dbContext.Entry(entity).Navigation(propertyName).LoadAsync();
 
         // Dispose logic
         private bool disposed = false;

@@ -1,6 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using System.Reflection;
-using UniIMP.DataAccess.Entities;
 using UniIMP.DataAccess.Repositories;
 
 namespace UniIMP.Controllers.API
@@ -16,21 +15,31 @@ namespace UniIMP.Controllers.API
             _repository = repository;
         }
 
-
         [HttpGet]
-        public async Task<IActionResult> Get([FromQuery] int page = 0, [FromQuery] int pageSize = 25)
+        public async Task<IActionResult> Get(
+            [FromQuery] int page = 0,
+            [FromQuery] int pageSize = 25,
+            [FromQuery] bool loadRelated = false)
         {
             IQueryable<T> queryable = _repository.GetQueryable();
+            List<T> entities = queryable.Skip(page * pageSize).Take(pageSize).ToList();
 
-            return Ok(queryable.Skip(page * pageSize).Take(pageSize).AsEnumerable());
+            if (loadRelated)
+                foreach (var entity in entities)
+                    await _repository.LoadRelatedAsync(entity);
+
+            return Ok(entities);
         }
 
         [HttpGet("{id}")]
-        public async Task<IActionResult> Get(int id)
+        public async Task<IActionResult> Get(int id, [FromQuery] bool loadRelated = false)
         {
-            var asset = await _repository.GetAsync(id);
+            var entity = await _repository.GetAsync(id);
 
-            return Ok(asset);
+            if (loadRelated && entity != null)
+                await _repository.LoadRelatedAsync(entity);
+
+            return Ok(entity);
         }
 
         [HttpPost]
@@ -45,27 +54,15 @@ namespace UniIMP.Controllers.API
             return Ok();
         }
 
-        //[HttpPost]
-        //public async Task<IActionResult> Post([FromBody] IEnumerable<T> model)
-        //{
-        //    if (!ModelState.IsValid)
-        //        return BadRequest();
-
-        //    await _repository.CreateAsync(model);
-        //    await _repository.SaveAsync();
-
-        //    return Ok();
-        //}
-
         [HttpPut("{id}")]
         public async Task<IActionResult> Put(int id, [FromBody] T model)
         {
             if (!ModelState.IsValid)
                 return BadRequest();
 
-            var asset = await _repository.GetAsync(id);
+            var entity = await _repository.GetAsync(id);
 
-            if (asset == null)
+            if (entity == null)
                 return BadRequest();
 
             try
@@ -76,9 +73,8 @@ namespace UniIMP.Controllers.API
                 {
                     idProp.SetValue(model, id);
                 }
-
-                
-            } catch (Exception e)
+            }
+            catch (Exception e)
             {
                 Console.WriteLine(e.StackTrace);
             }
@@ -92,9 +88,9 @@ namespace UniIMP.Controllers.API
         [HttpDelete("{id}")]
         public async Task<IActionResult>? Delete(int id)
         {
-            var asset = await _repository.GetAsync(id);
+            var entity = await _repository.GetAsync(id);
 
-            if (asset == null)
+            if (entity == null)
                 return BadRequest();
 
             _repository.Remove(id);

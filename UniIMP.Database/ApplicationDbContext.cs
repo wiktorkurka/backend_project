@@ -1,4 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
+using System.Net;
 using UniIMP.DataAccess.Entities;
 
 namespace UniIMP.DataAccess
@@ -37,12 +40,33 @@ namespace UniIMP.DataAccess
             {
                 e.ToTable(name: "Assets");
 
-                e.HasMany(a => a.Tags)
-                 .WithMany(at => at.Assets)
-                 .UsingEntity(x =>
-                 {
-                     x.ToTable("AssetTags");
-                 });
+                e.Property(e => e.Properties)
+                 .HasConversion(
+                    jObj => jObj.ToString(),
+                    str => JsonConvert.DeserializeObject<JObject>(
+                        string.IsNullOrEmpty(str) ? "{}" : str)
+                 );
+
+                e.HasOne(sa => sa.Agent)
+                 .WithOne(a => a.Asset)
+                 .HasForeignKey<SnmpAgent>(a => a.AssetId)
+                 .IsRequired(false);
+            });
+
+            builder.Entity<SnmpAgent>(e =>
+            {
+                e.ToTable(name: "SnmpAgents");
+
+                e.Property(e => e.IpAddress)
+                 .HasConversion(
+                    ipAddr => ipAddr.ToString(),
+                    str => IPAddress.Parse(str)
+                    );
+
+                e.HasOne(sa => sa.Asset)
+                 .WithOne(a => a.Agent)
+                 .HasForeignKey<Asset>(a => a.AgentId)
+                 .IsRequired(false);
             });
         }
     }
