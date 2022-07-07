@@ -43,7 +43,7 @@ services.AddQuartz(q =>
     q.AddTrigger(options => {
         options.ForJob(pollerJob)
         .WithIdentity("PollerJob-trigger")
-        .WithCronSchedule("*/5 * * * *");
+        .WithCronSchedule("* */5 * * * ?");
     });
 });
 
