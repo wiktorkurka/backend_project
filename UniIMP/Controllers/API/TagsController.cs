@@ -49,5 +49,30 @@ namespace UniIMP.Controllers.API
 
             return Ok();
         }
+
+        [HttpGet("{id?}/color")]
+        public async Task<IActionResult> Color(int id) {
+            var tag = await _tagRepository.GetAsync(id);
+
+            if (tag == null)
+                return BadRequest();
+
+            return Ok(tag.Argb);
+        }
+
+        [HttpPost("{id?}/color")]
+        public async Task<IActionResult> Color(int id, [FromBody] int color) {
+            var tag = await _tagRepository.GetAsync(id);
+
+            if (tag == null)
+                return BadRequest();
+
+            tag.Argb = color;
+
+            _tagRepository.Update(tag);
+            await _tagRepository.SaveAsync();
+
+            return Ok();
+        }
     }
 }
