@@ -10,6 +10,7 @@ services:
       dockerfile: UniIMP/Dockerfile
     depends_on:
     - postgres
+    restart: always
     networks:
       uniimp_bridge:
         ipv4_address: 172.10.0.2
@@ -30,15 +31,45 @@ services:
       uniimp_bridge:
         ipv4_address: 172.10.0.3
 
-  uniimp_testenv:
+  uniimp_testenv1:
     image: ${DOCKER_REGISTRY-}uniimp_testenv
-    container_name: uniimp_testenv
+    container_name: uniimp_testenv1
     build:
       context: TestEnv
       dockerfile: Dockerfile 
     networks:
       uniimp_bridge:
         ipv4_address: 172.10.0.4
+
+  uniimp_testenv2:
+    image: ${DOCKER_REGISTRY-}uniimp_testenv
+    container_name: uniimp_testenv2
+    build:
+      context: TestEnv
+      dockerfile: Dockerfile 
+    networks:
+      uniimp_bridge:
+        ipv4_address: 172.10.0.5
+
+  uniimp_testenv3:
+    image: ${DOCKER_REGISTRY-}uniimp_testenv
+    container_name: uniimp_testenv3
+    build:
+      context: TestEnv
+      dockerfile: Dockerfile 
+    networks:
+      uniimp_bridge:
+        ipv4_address: 172.10.0.6
+
+  uniimp_testenv4:
+    image: ${DOCKER_REGISTRY-}uniimp_testenv
+    container_name: uniimp_testenv4
+    build:
+      context: TestEnv
+      dockerfile: Dockerfile 
+    networks:
+      uniimp_bridge:
+        ipv4_address: 172.10.0.7
 
 
 networks:
